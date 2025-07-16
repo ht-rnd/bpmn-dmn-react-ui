@@ -1,0 +1,52 @@
+@import "dmn-js/dist/assets/diagram-js.css";
+@import "dmn-js/dist/assets/dmn-font/css/dmn-embedded.css";
+@import "dmn-js/dist/assets/dmn-js-decision-table-controls.css";
+@import "dmn-js/dist/assets/dmn-js-decision-table.css";
+@import "dmn-js/dist/assets/dmn-js-drd.css";
+@import "dmn-js/dist/assets/dmn-js-literal-expression.css";
+@import "dmn-js/dist/assets/dmn-js-shared.css";
+
+@import "bpmn-js/dist/assets/diagram-js.css";
+@import "bpmn-js/dist/assets/bpmn-font/css/bpmn.css";
+@import "bpmn-js-color-picker/colors/color-picker.css";
+@import "bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css";
+@import "@bpmn-io/properties-panel/dist/assets/properties-panel.css";
+@import "diagram-js-minimap/assets/diagram-js-minimap.css";
+
+.dark .djs-container {
+  filter: invert(1) hue-rotate(180deg);
+}
+.dark .djs-direct-editing-content {
+  color: black;
+}
+
+/* DMN */
+.dark .tjs-container {
+  filter: invert(1) hue-rotate(180deg);
+}
+.dark .dms-select-options {
+  filter: invert(1) hue-rotate(180deg);
+}
+.dark .viewer-container {
+  filter: invert(1) hue-rotate(180deg);
+}
+.dark .literal-expression-properties {
+  color: black;
+}
+.dark .dmn-definitions {
+  color: black;
+}
+
+/* BPMN */
+.dark .bio-properties-panel-container {
+  filter: invert(1) hue-rotate(180deg);
+}
+.dark .djs-minimap {
+  color: black;
+}
+.dark .djs-popup {
+  color: black;
+}
+.dark .entry {
+  color: black;
+}

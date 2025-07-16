@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --radius: 0.75rem;
+  }
+  .dark {
+    --background: 240 5.9% 10%;
+    --foreground: 0 0% 92%;
+    --border: 240 3.7% 30%;
+    --input: 240 3.7% 30%;
+  }
+}
