@@ -1,6 +1,15 @@
 {
   "name": "@ht-rnd/bpmn-dmn-react-ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "license": "Apache-2.0",
+  "keywords": [
+    "bpmn",
+    "bpmn-js",
+    "dmn",
+    "dmn-js",
+    "modeler",
+    "modeling"
+  ],
   "main": "./dist/lib/main.umd.js",
   "module": "./dist/lib/main.es.js",
   "types": "./dist/types/lib/index.d.ts",
