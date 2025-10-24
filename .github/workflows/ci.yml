@@ -1,4 +1,5 @@
 name: CI/CD for bpmn-dmn-react-ui
+
 on:
   push:
     branches:
@@ -7,6 +8,11 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -26,8 +32,7 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Check version and publish
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          access: public
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
