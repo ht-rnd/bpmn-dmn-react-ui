@@ -37,6 +37,64 @@ export default {
 import "@ht-rnd/bpmn-dmn-react-ui/styles.css";
 ```
 
+## Theming and Customization
+
+This library is built on the `shadcn/ui` theming architecture, which relies on CSS variables for colors, borders, spacing, and radius. You can easily override these variables in your own project to match your application's design system.
+
+1. In your project's global CSS file (e.g., `src/index.css`), define your custom theme variables inside a `@layer base` block.
+2. Your definitions will automatically override the library's default theme.
+
+When you pass the `theme="dark"` prop to the BpmnProvider and DmnProvider, it will apply a `.dark` class to its root element, causing the browser to use the variables defined in your `.dark { ... }` block.
+
+### Example `index.css`:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --primary: 329 100% 44%;
+    --primary-hover: 329 100% 38%;
+    --primary-pressed: 329 100% 31%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 3.8% 80%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 240 5.9% 10%;
+    --foreground: 0 0% 92%;
+    --primary: 330 96% 35%;
+    --primary-hover: 330 96% 41%;
+    --primary-pressed: 330 96% 48%;
+    --primary-foreground: 240 17.1% 92%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 92%;
+    --muted: 240 3.8% 40%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 92%;
+    --destructive: 0 100% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 30%;
+    --input: 240 3.7% 30%;<>
+  }
+}
+```
+
 ## Quick Start
 
 ### BPMN Example
@@ -152,10 +210,6 @@ interface IToolbarButton {
   className?: string;
 }
 ```
-
-## Styling & Theming
-
-The library uses Tailwind CSS and shadcn/ui components for consistent, accessible UI patterns. All components accept className props for additional customization and support all shadcn/ui button variants.
 
 ## Compatibility
 

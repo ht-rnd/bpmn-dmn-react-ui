@@ -1,6 +1,6 @@
 {
   "name": "@ht-rnd/bpmn-dmn-react-ui",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "Apache-2.0",
   "keywords": [
     "bpmn",
@@ -23,6 +23,10 @@
       "require": "./dist/lib/main.umd.js"
     },
     "./styles.css": "./dist/styles.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ht-rnd/bpmn-dmn-react-ui"
   },
   "scripts": {
     "dev": "vite",
