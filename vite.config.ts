@@ -1,13 +1,19 @@
 import { resolve } from "path";
-import { defineConfig } from "vite";
+import { defineConfig, type UserConfig } from "vite";
 import dts from "vite-plugin-dts";
 import bundleCss from "vite-plugin-bundle-css";
-import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
 
-// https://vite.dev/config/
-export default defineConfig({
+const config: UserConfig & {
+  test?: {
+    globals?: boolean;
+    environment?: string;
+    setupFiles?: string;
+    [key: string]: any;
+  };
+} = {
   plugins: [
-    tailwindcss(),
+    react(),
     dts({
       insertTypesEntry: true,
       rollupTypes: true,
@@ -47,14 +53,15 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
-    setupFiles: ["src/tests/setup.ts"],
+    setupFiles: "./src/tests/setup.ts",
     css: true,
     reporters: ["verbose", "junit"],
     coverage: {
       provider: "istanbul",
       reporter: ["text", "json", "html", "cobertura"],
-      include: ["src/tests/**"],
-      exclude: ["src/stories/**", "src/lib/**"],
+      include: ["src/lib/components"],
     },
   },
-});
+};
+
+export default defineConfig(config);

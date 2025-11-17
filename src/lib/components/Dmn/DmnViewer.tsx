@@ -10,7 +10,7 @@ import "dmn-js/dist/assets/dmn-js-drd.css";
 import "dmn-js/dist/assets/dmn-js-literal-expression.css";
 import "dmn-js/dist/assets/dmn-js-shared.css";
 
-export const DmnViewer = ({ xml }: { xml: string }) => {
+export const DmnViewer = ({ xml = emptyDMN }) => {
   const containerRef = useRef(null);
   const dmnRef = useRef(null);
   if (!xml) xml = emptyDMN;
@@ -41,6 +41,9 @@ export const DmnViewer = ({ xml }: { xml: string }) => {
   }, [xml]);
 
   return (
-    <div ref={containerRef} className="bg-background text-foreground border border-input rounded-md w-full h-full" />
+    <div
+      ref={containerRef}
+      className="bg-background text-foreground border border-input rounded-md w-full h-full"
+    />
   );
 };

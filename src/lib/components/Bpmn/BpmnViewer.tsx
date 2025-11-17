@@ -47,7 +47,9 @@ export const BpmnViewer = ({ xml = emptyBPMN }) => {
     const disableEditing = () => {
       if (!propertiesPanelRef.current) return;
 
-      const inputs = propertiesPanelRef.current.querySelectorAll("input, textarea, select");
+      const inputs = propertiesPanelRef.current.querySelectorAll(
+        "input, textarea, select"
+      );
       const buttons = propertiesPanelRef.current.querySelectorAll(
         ".bio-properties-panel-remove-entry, .bio-properties-panel-open-feel-popup, .bio-properties-panel-add-entry, .bio-properties-panel-feel-icon"
       );
@@ -97,7 +99,9 @@ export const BpmnViewer = ({ xml = emptyBPMN }) => {
     const eventBus = bpmnViewer.get("eventBus") as EventBus;
     eventBus.on("element.click", (event: { element: { id: string } }) => {
       const element = event.element;
-      const elementRegistry = bpmnModeler.get("elementRegistry") as ElementRegistry;
+      const elementRegistry = bpmnModeler.get(
+        "elementRegistry"
+      ) as ElementRegistry;
       const modelerElement = elementRegistry.get(element.id);
       if (modelerElement) {
         const selection = bpmnModeler.get("selection") as {
@@ -123,7 +127,10 @@ export const BpmnViewer = ({ xml = emptyBPMN }) => {
 
   return (
     <div className="bg-background text-foreground flex gap-2 w-full h-full">
-      <div ref={containerRef} className="bg-background text-foreground border border-input rounded-md grow" />
+      <div
+        ref={containerRef}
+        className="bg-background text-foreground border border-input rounded-md grow"
+      />
       <div
         ref={propertiesPanelRef}
         className="bg-background text-foreground border border-input rounded-md max-w-[400px]"

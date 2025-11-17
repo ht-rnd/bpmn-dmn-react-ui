@@ -1,11 +1,18 @@
 import { useRef } from "react";
-import { orientation, spacing } from "../../consts/Toolbar";
+import { orientation, side, spacing } from "../../consts/Toolbar";
 import type { IToolbar, IToolbarButton } from "../../interfaces/BpmnDmn";
 import { Button } from "../ui/button";
 import { useDmnContext } from "./DmnProvider";
+import { Upload } from "lucide-react";
 
 export const DmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
-  const { handleNewDiagram, handleLoadDiagram, handleDownloadDiagram, handleToggleView } = useDmnContext();
+  const {
+    handleNewDiagram,
+    handleLoadDiagram,
+    handleSaveDiagram,
+    handleDownloadDiagram,
+    handleToggleView,
+  } = useDmnContext();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +40,9 @@ export const DmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
       case "load":
         fileInputRef.current?.click();
         break;
+      case "save":
+        handleSaveDiagram();
+        break;
       case "download":
         handleDownloadDiagram();
         break;
@@ -44,16 +54,20 @@ export const DmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
 
   const buttons = [
     { id: "new", defaultLabel: "New DMN" },
-    { id: "load", defaultLabel: "Load DMN" },
-    { id: "download", defaultLabel: "Download DMN" },
+    { id: "load", defaultLabel: "Upload" },
+    { id: "save", defaultLabel: "Save" },
+    { id: "download", defaultLabel: "Download" },
     { id: "toggle", defaultLabel: "Toggle View" },
   ];
 
   return (
     <div
-      className={`flex mb-2 ${orientation[config.orientation || "horizontal"]} ${spacing[config.spacing || "md"]} ${
-        config.className || ""
-      }`}
+      className={`flex
+        ${side[config.side || "left"]}
+        ${orientation[config.orientation || "horizontal"]} 
+        ${spacing[config.spacing || "md"]} 
+        ${config.className || ""}
+      `}
     >
       <input
         type="file"
@@ -69,7 +83,8 @@ export const DmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
           return !(typeof buttonConfig === "object" && buttonConfig?.hidden);
         })
         .map((button) => {
-          const buttonConfig = (config[button.id as keyof IToolbar] as IToolbarButton) || {};
+          const buttonConfig =
+            (config[button.id as keyof IToolbar] as IToolbarButton) || {};
 
           return (
             <Button
@@ -78,6 +93,7 @@ export const DmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
               onClick={() => handleButtonClick(button.id)}
               className={buttonConfig.className}
             >
+              {button.id === "load" && <Upload />}
               {buttonConfig.label || button.defaultLabel}
             </Button>
           );

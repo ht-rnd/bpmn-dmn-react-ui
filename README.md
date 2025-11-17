@@ -100,13 +100,18 @@ When you pass the `theme="dark"` prop to the BpmnProvider and DmnProvider, it wi
 ### BPMN Example
 
 ```tsx
-import { BpmnProvider, BpmnEditor, BpmnToolbar } from "@ht-rnd/bpmn-dmn-react-ui";
+import {
+  BpmnProvider,
+  BpmnEditor,
+  BpmnToolbar,
+  BpmnViewer,
+} from "@ht-rnd/bpmn-dmn-react-ui";
 
 function BpmnExample() {
   const editorRef = useRef(null);
   return (
-    <BpmnProvider theme="dark">
-      <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8">
+      <BpmnProvider theme="dark" toolbarPosition="bottom">
         <BpmnToolbar
           config={{
             download: {
@@ -114,6 +119,7 @@ function BpmnExample() {
               variant: "default",
             },
             toggle: { hidden: true },
+            side: "right",
           }}
         />
         <div className="h-[600px]">
@@ -123,10 +129,17 @@ function BpmnExample() {
             onXMLChange={(xml) => {
               console.log("BPMN updated:", xml);
             }}
+            onSave={(xml) => {
+              console.log("BPMN saved:", xml);
+            }}
+            onUpload={(xml) => {
+              console.log("BPMN uploaded:", xml);
+            }}
           />
         </div>
-      </div>
-    </BpmnProvider>
+      </BpmnProvider>
+      <BpmnViewer xml={yourBpmnXml} />
+    </div>
   );
 }
 ```
@@ -134,13 +147,18 @@ function BpmnExample() {
 ### DMN Example
 
 ```tsx
-import { DmnProvider, DmnEditor, DmnToolbar } from "@ht-rnd/bpmn-dmn-react-ui";
+import {
+  DmnProvider,
+  DmnEditor,
+  DmnToolbar,
+  DmnViewer,
+} from "@ht-rnd/bpmn-dmn-react-ui";
 
 function DmnExample() {
   const editorRef = useRef(null);
   return (
-    <DmnProvider>
-      <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8">
+      <DmnProvider>
         <DmnToolbar />
         <div className="h-[600px]">
           <DmnEditor
@@ -151,8 +169,9 @@ function DmnExample() {
             }}
           />
         </div>
-      </div>
-    </DmnProvider>
+      </DmnProvider>
+      <DmnViewer />
+    </div>
   );
 }
 ```
@@ -167,6 +186,7 @@ Both BPMN and DMN components require their respective provider wrappers for prop
 interface IProviderProps {
   theme?: "light" | "dark"; // Default: "light"
   children: React.ReactNode;
+  toolbarPosition?: "top" | "bottom"; // Default: "top"
 }
 ```
 
@@ -180,6 +200,8 @@ interface IViewerProps {
 interface IEditorProps {
   initialXML?: string;
   onXMLChange?: (xml: string) => void;
+  onSave?: (xml: string) => void | Promise<void>;
+  onUpload?: (xml: string) => void | Promise<void>;
 }
 
 interface IEditorRef {
@@ -195,18 +217,26 @@ interface IToolbar {
   config?: {
     new?: IToolbarButton; // New diagram
     load?: IToolbarButton; // Load diagram
+    save?: IToolbarButton; // Save diagram
     download?: IToolbarButton; // Download diagram
     toggle?: IToolbarButton; // Toggle view
   };
   className?: string;
   orientation?: "horizontal" | "vertical";
   spacing?: "sm" | "md" | "lg";
+  side?: "left" | "right";
 }
 
 interface IToolbarButton {
   hidden?: boolean;
   label?: string;
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
   className?: string;
 }
 ```
