@@ -1,11 +1,18 @@
 import { useRef } from "react";
-import { orientation, spacing } from "../../consts/Toolbar";
+import { orientation, side, spacing } from "../../consts/Toolbar";
 import type { IToolbar, IToolbarButton } from "../../types";
 import { Button } from "../ui/button";
 import { useBpmnContext } from "./BpmnProvider";
+import { Upload } from "lucide-react";
 
 export const BpmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
-  const { handleNewDiagram, handleLoadDiagram, handleDownloadDiagram, handleToggleView } = useBpmnContext();
+  const {
+    handleNewDiagram,
+    handleLoadDiagram,
+    handleSaveDiagram,
+    handleDownloadDiagram,
+    handleToggleView,
+  } = useBpmnContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +39,9 @@ export const BpmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
       case "load":
         fileInputRef.current?.click();
         break;
+      case "save":
+        handleSaveDiagram();
+        break;
       case "download":
         handleDownloadDiagram();
         break;
@@ -43,16 +53,20 @@ export const BpmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
 
   const buttons = [
     { id: "new", defaultLabel: "New BPMN" },
-    { id: "load", defaultLabel: "Load BPMN" },
-    { id: "download", defaultLabel: "Download BPMN" },
+    { id: "load", defaultLabel: "Upload" },
+    { id: "save", defaultLabel: "Save" },
+    { id: "download", defaultLabel: "Download" },
     { id: "toggle", defaultLabel: "Toggle View" },
   ];
 
   return (
     <div
-      className={`flex mb-2 ${orientation[config.orientation || "horizontal"]} ${spacing[config.spacing || "md"]} ${
-        config.className || ""
-      }`}
+      className={`flex 
+        ${side[config.side || "left"]} 
+        ${orientation[config.orientation || "horizontal"]} 
+        ${spacing[config.spacing || "md"]} 
+        ${config.className || ""}
+      `}
     >
       <input
         type="file"
@@ -68,7 +82,8 @@ export const BpmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
           return !(typeof buttonConfig === "object" && buttonConfig?.hidden);
         })
         .map((button) => {
-          const buttonConfig = (config[button.id as keyof IToolbar] as IToolbarButton) || {};
+          const buttonConfig =
+            (config[button.id as keyof IToolbar] as IToolbarButton) || {};
 
           return (
             <Button
@@ -77,6 +92,7 @@ export const BpmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
               onClick={() => handleButtonClick(button.id)}
               className={buttonConfig.className}
             >
+              {button.id === "load" && <Upload />}
               {buttonConfig.label || button.defaultLabel}
             </Button>
           );

@@ -16,7 +16,10 @@ export const Provider: Story = {
   args: {
     theme: undefined,
     children: (
-      <div className="h-screen" style={{ backgroundColor: "hsl(var(--background))" }}>
+      <div
+        className="h-screen"
+        style={{ backgroundColor: "hsl(var(--background))" }}
+      >
         <DmnEditor />
       </div>
     ),

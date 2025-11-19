@@ -1,4 +1,3 @@
-import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, vi, it, beforeAll } from "vitest";
 import { BpmnProvider, BpmnEditor, BpmnToolbar, useBpmnContext } from "../lib";
@@ -6,6 +5,7 @@ import { BpmnProvider, BpmnEditor, BpmnToolbar, useBpmnContext } from "../lib";
 describe("BPMN Components", () => {
   const mockHandleNewDiagram = vi.fn();
   const mockHandleDownloadDiagram = vi.fn();
+  const mockHandleSaveDiagram = vi.fn();
   const mockHandleToggleView = vi.fn();
   const mockHandleLoadDiagram = vi.fn();
 
@@ -14,6 +14,7 @@ describe("BPMN Components", () => {
       editorRef: { current: null },
       handleNewDiagram: mockHandleNewDiagram,
       handleLoadDiagram: mockHandleLoadDiagram,
+      handleSaveDiagram: mockHandleSaveDiagram,
       handleDownloadDiagram: mockHandleDownloadDiagram,
       handleToggleView: mockHandleToggleView,
       isEditorView: true,
@@ -25,17 +26,22 @@ describe("BPMN Components", () => {
     render(<BpmnToolbar />);
 
     const newButton = screen.getByText("New BPMN");
-    const loadButton = screen.getByText("Load BPMN");
-    const downloadButton = screen.getByText("Download BPMN");
+    const loadButton = screen.getByText("Upload");
+    const saveButton = screen.getByText("Save");
+    const downloadButton = screen.getByText("Download");
     const toggleButton = screen.getByText("Toggle View");
 
     expect(newButton).toBeInTheDocument();
     expect(loadButton).toBeInTheDocument();
+    expect(saveButton).toBeInTheDocument();
     expect(downloadButton).toBeInTheDocument();
     expect(toggleButton).toBeInTheDocument();
 
     fireEvent.click(newButton);
     expect(mockHandleNewDiagram).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(saveButton);
+    expect(mockHandleSaveDiagram).toHaveBeenCalledTimes(1);
 
     fireEvent.click(downloadButton);
     expect(mockHandleDownloadDiagram).toHaveBeenCalledTimes(1);
@@ -47,19 +53,27 @@ describe("BPMN Components", () => {
   it("should trigger file input", async () => {
     render(<BpmnToolbar />);
 
-    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const fileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
 
     expect(fileInput).toBeInTheDocument();
     expect(fileInput.style.display).toBe("none");
 
-    const file = new File(["<bpmn:definitions></bpmn:definitions>"], "test.bpmn", {
-      type: "application/xml",
-    });
+    const file = new File(
+      ["<bpmn:definitions></bpmn:definitions>"],
+      "test.bpmn",
+      {
+        type: "application/xml",
+      }
+    );
 
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(mockHandleLoadDiagram).toHaveBeenCalledWith("<bpmn:definitions></bpmn:definitions>");
+      expect(mockHandleLoadDiagram).toHaveBeenCalledWith(
+        "<bpmn:definitions></bpmn:definitions>"
+      );
     });
   });
 
@@ -91,6 +105,7 @@ describe("BPMN Components", () => {
       handleNewDiagram: vi.fn(),
       handleLoadDiagram: vi.fn(),
       handleDownloadDiagram: vi.fn(),
+      handleSaveDiagram: vi.fn(),
       handleToggleView: vi.fn(),
       isEditorView: true,
       setIsEditorView: vi.fn(),
@@ -117,6 +132,7 @@ describe("BPMN Components", () => {
       handleNewDiagram: vi.fn(),
       handleLoadDiagram: vi.fn(),
       handleDownloadDiagram: vi.fn(),
+      handleSaveDiagram: vi.fn(),
       handleToggleView: vi.fn(),
       isEditorView: false,
       setIsEditorView: vi.fn(),

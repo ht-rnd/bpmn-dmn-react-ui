@@ -1,4 +1,3 @@
-import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, vi, it, beforeAll } from "vitest";
 import { DmnProvider, DmnEditor, DmnToolbar, useDmnContext } from "../lib";
@@ -6,6 +5,7 @@ import { DmnProvider, DmnEditor, DmnToolbar, useDmnContext } from "../lib";
 describe("DMN Components", () => {
   const mockHandleNewDiagram = vi.fn();
   const mockHandleDownloadDiagram = vi.fn();
+  const mockHandleSaveDiagram = vi.fn();
   const mockHandleToggleView = vi.fn();
   const mockHandleLoadDiagram = vi.fn();
 
@@ -14,6 +14,7 @@ describe("DMN Components", () => {
       editorRef: { current: null },
       handleNewDiagram: mockHandleNewDiagram,
       handleLoadDiagram: mockHandleLoadDiagram,
+      handleSaveDiagram: mockHandleSaveDiagram,
       handleDownloadDiagram: mockHandleDownloadDiagram,
       handleToggleView: mockHandleToggleView,
       isEditorView: true,
@@ -25,17 +26,22 @@ describe("DMN Components", () => {
     render(<DmnToolbar />);
 
     const newButton = screen.getByText("New DMN");
-    const loadButton = screen.getByText("Load DMN");
-    const downloadButton = screen.getByText("Download DMN");
+    const loadButton = screen.getByText("Upload");
+    const saveButton = screen.getByText("Save");
+    const downloadButton = screen.getByText("Download");
     const toggleButton = screen.getByText("Toggle View");
 
     expect(newButton).toBeInTheDocument();
     expect(loadButton).toBeInTheDocument();
+    expect(saveButton).toBeInTheDocument();
     expect(downloadButton).toBeInTheDocument();
     expect(toggleButton).toBeInTheDocument();
 
     fireEvent.click(newButton);
     expect(mockHandleNewDiagram).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(saveButton);
+    expect(mockHandleSaveDiagram).toHaveBeenCalledTimes(1);
 
     fireEvent.click(downloadButton);
     expect(mockHandleDownloadDiagram).toHaveBeenCalledTimes(1);
@@ -47,16 +53,22 @@ describe("DMN Components", () => {
   it("should trigger file input", async () => {
     render(<DmnToolbar />);
 
-    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const fileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
 
     expect(fileInput).toBeInTheDocument();
 
-    const file = new File(["<dmn:definitions></dmn:definitions>"], "test.dmn", { type: "application/xml" });
+    const file = new File(["<dmn:definitions></dmn:definitions>"], "test.dmn", {
+      type: "application/xml",
+    });
 
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(mockHandleLoadDiagram).toHaveBeenCalledWith("<dmn:definitions></dmn:definitions>");
+      expect(mockHandleLoadDiagram).toHaveBeenCalledWith(
+        "<dmn:definitions></dmn:definitions>"
+      );
     });
   });
 
@@ -76,7 +88,9 @@ describe("DMN Components", () => {
 
   it("should integrate DmnEditor with DmnProvider", async () => {
     const mockSetXML = vi.fn();
-    const mockGetXML = vi.fn().mockResolvedValue("<dmn:definitions></dmn:definitions>");
+    const mockGetXML = vi
+      .fn()
+      .mockResolvedValue("<dmn:definitions></dmn:definitions>");
 
     vi.mocked(useDmnContext).mockReturnValue({
       editorRef: {
@@ -88,6 +102,7 @@ describe("DMN Components", () => {
       handleNewDiagram: vi.fn(),
       handleLoadDiagram: vi.fn(),
       handleDownloadDiagram: vi.fn(),
+      handleSaveDiagram: vi.fn(),
       handleToggleView: vi.fn(),
       isEditorView: true,
       setIsEditorView: vi.fn(),
@@ -114,6 +129,7 @@ describe("DMN Components", () => {
       handleNewDiagram: vi.fn(),
       handleLoadDiagram: vi.fn(),
       handleDownloadDiagram: vi.fn(),
+      handleSaveDiagram: vi.fn(),
       handleToggleView: vi.fn(),
       isEditorView: false,
       setIsEditorView: vi.fn(),
