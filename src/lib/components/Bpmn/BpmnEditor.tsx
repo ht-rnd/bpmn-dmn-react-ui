@@ -125,7 +125,7 @@ export const BpmnEditor = forwardRef<IEditorRef, IEditorProps>(
       return () => {
         bpmn.destroy();
       };
-    }, [currentXML, onXMLChange, isEditorView]);
+    }, [isEditorView]);
 
     if (!isEditorView) {
       return (
