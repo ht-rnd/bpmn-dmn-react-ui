@@ -145,7 +145,7 @@ export const BpmnEditor = forwardRef<IEditorRef, IEditorProps>(
         />
         <div
           ref={propertiesPanelRef}
-          className="bg-background text-foreground border border-input rounded-md max-w-[400px]"
+          className="bg-background text-foreground border border-input rounded-md w-64"
         />
       </div>
     );
