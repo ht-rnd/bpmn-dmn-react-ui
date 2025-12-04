@@ -65,6 +65,11 @@ vi.mock("camunda-bpmn-js-behaviors/lib/camunda-cloud", () => ({
   default: {},
 }));
 
+vi.mock("dmn-js-properties-panel", () => ({
+  DmnPropertiesPanelModule: {},
+  DmnPropertiesProviderModule: {},
+}));
+
 global.FileReader = class FileReader {
   onload: ((event: any) => void) | null = null;
   readAsText(file: File) {
@@ -94,6 +99,7 @@ vi.mock("dmn-js/lib/Modeler", () => ({
     saveXML: vi.fn().mockResolvedValue({
       xml: "<dmn:definitions></dmn:definitions>",
     }),
+    on: vi.fn(),
     getActiveViewer: vi.fn().mockReturnValue({
       get: vi.fn().mockImplementation((service) => {
         if (service === "canvas") {
