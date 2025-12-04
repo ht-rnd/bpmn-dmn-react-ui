@@ -32,13 +32,13 @@ export const App: React.FC = () => {
           <BpmnEditor
             ref={editorRef}
             onXMLChange={(xml) => {
-              console.log("BPMN updated:", xml);
+              //console.log("BPMN updated:", xml);
             }}
             onUpload={(xml) => {
-              console.log("BPMN uploaded:", xml);
+              //console.log("BPMN uploaded:", xml);
             }}
             onSave={(xml) => {
-              console.log("BPMN saved:", xml);
+              //console.log("BPMN saved:", xml);
             }}
           />
         </div>
@@ -60,13 +60,13 @@ export const App: React.FC = () => {
           <DmnEditor
             ref={editorRef2}
             onXMLChange={(xml) => {
-              console.log("DMN updated:", xml);
+              //console.log("DMN updated:", xml);
             }}
             onUpload={(xml) => {
-              console.log("DMN uploaded:", xml);
+              //console.log("DMN uploaded:", xml);
             }}
             onSave={(xml) => {
-              console.log("DMN saved:", xml);
+              //console.log("DMN saved:", xml);
             }}
           />
         </div>

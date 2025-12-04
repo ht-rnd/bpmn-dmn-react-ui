@@ -7,6 +7,11 @@ import {
 } from "react";
 import "../../styles.css";
 import DmnModeler from "dmn-js/lib/Modeler";
+import {
+  DmnPropertiesPanelModule,
+  DmnPropertiesProviderModule,
+} from "dmn-js-properties-panel";
+import "@bpmn-io/properties-panel/dist/assets/properties-panel.css";
 import type { IEditorProps, IEditorRef } from "../../interfaces/BpmnDmn";
 import { emptyDMN } from "../../services/dmn-provider.mock";
 import { useDmnContext } from "./DmnProvider";
@@ -16,6 +21,7 @@ export const DmnEditor = forwardRef<IEditorRef, IEditorProps>(
     const { editorRef, isEditorView } = useDmnContext();
     const [currentXML, setCurrentXML] = useState<string>(initialXML);
     const containerRef = useRef<HTMLDivElement>(null);
+    const propertiesPanelRef = useRef<HTMLDivElement>(null);
     const dmnRef = useRef<InstanceType<typeof DmnModeler> | null>(null);
 
     useImperativeHandle(ref, () => ({
@@ -49,12 +55,54 @@ export const DmnEditor = forwardRef<IEditorRef, IEditorProps>(
     }));
 
     useEffect(() => {
-      if (!containerRef.current) return;
+      if (!containerRef.current || !propertiesPanelRef.current) return;
 
       const dmn = new DmnModeler({
         container: containerRef.current,
+        drd: {
+          propertiesPanel: {
+            parent: propertiesPanelRef.current,
+          },
+          additionalModules: [
+            DmnPropertiesPanelModule,
+            DmnPropertiesProviderModule,
+          ],
+        },
+        decisionTable: {
+          propertiesPanel: {
+            parent: propertiesPanelRef.current,
+          },
+          additionalModules: [
+            DmnPropertiesPanelModule,
+            DmnPropertiesProviderModule,
+          ],
+        },
+        literalExpression: {
+          propertiesPanel: {
+            parent: propertiesPanelRef.current,
+          },
+          additionalModules: [
+            DmnPropertiesPanelModule,
+            DmnPropertiesProviderModule,
+          ],
+        },
       });
       dmnRef.current = dmn;
+
+      const hideInactivePropertyContainers = () => {
+        if (!propertiesPanelRef.current) return;
+        const containers =
+          propertiesPanelRef.current.querySelectorAll<HTMLElement>(
+            ".bio-properties-panel-container"
+          );
+        containers.forEach((container, index) => {
+          if (index === containers.length - 1) {
+            container.style.display = "block";
+          } else {
+            container.style.display = "none";
+          }
+        });
+      };
 
       const registerEventListeners = () => {
         const activeViewer = dmn.getActiveViewer();
@@ -70,6 +118,9 @@ export const DmnEditor = forwardRef<IEditorRef, IEditorProps>(
                 onXMLChange(result.xml);
               }
             }
+          });
+          eventBus.on("selection.changed", () => {
+            setTimeout(hideInactivePropertyContainers, 50);
           });
         }
       };
@@ -91,10 +142,33 @@ export const DmnEditor = forwardRef<IEditorRef, IEditorProps>(
 
       initializeDiagram();
 
+      dmn.on("views.changed", ({ activeView }: any) => {
+        if (activeView && activeView.element) {
+          registerEventListeners();
+          const activeViewer = dmn.getActiveViewer();
+          if (activeViewer) {
+            const canvas = activeViewer.get("canvas");
+            canvas.zoom("fit-viewport", "auto");
+          }
+        }
+      });
+
+      const observer = new MutationObserver(() => {
+        hideInactivePropertyContainers();
+      });
+
+      if (propertiesPanelRef.current) {
+        observer.observe(propertiesPanelRef.current, {
+          childList: true,
+          subtree: false,
+        });
+      }
+
       return () => {
+        observer.disconnect();
         dmn.destroy();
       };
-    }, [currentXML, onXMLChange, isEditorView]);
+    }, [isEditorView]);
 
     useEffect(() => {
       if (ref && typeof ref === "object" && "current" in ref)
@@ -112,10 +186,14 @@ export const DmnEditor = forwardRef<IEditorRef, IEditorProps>(
     }
 
     return (
-      <div className="bg-background text-foreground flex h-full w-full max-w-full max-h-full">
+      <div className="bg-background text-foreground flex gap-2 w-full h-full">
         <div
           ref={containerRef}
-          className="bg-background text-foreground grow border border-input rounded-md overflow-hidden relative w-full h-full max-w-full max-h-full p-2"
+          className="bg-background text-foreground border border-input rounded-md grow p-2"
+        />
+        <div
+          ref={propertiesPanelRef}
+          className="bg-background text-foreground border border-input rounded-md w-64"
         />
       </div>
     );

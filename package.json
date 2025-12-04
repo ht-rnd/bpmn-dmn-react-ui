@@ -1,6 +1,6 @@
 {
   "name": "@ht-rnd/bpmn-dmn-react-ui",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "Apache-2.0",
   "keywords": [
     "bpmn",
@@ -52,6 +52,7 @@
     "clsx": "^2.1.1",
     "diagram-js-minimap": "^5.2.0",
     "dmn-js": "^17.2.0",
+    "dmn-js-properties-panel": "^3.8.3",
     "esbuild": "^0.25.2",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",

@@ -122,6 +122,7 @@ export const BpmnViewer = ({ xml = emptyBPMN }) => {
     return () => {
       bpmnViewer.destroy();
       bpmnModeler.destroy();
+      observer.disconnect();
     };
   }, [xml]);
 
@@ -133,7 +134,7 @@ export const BpmnViewer = ({ xml = emptyBPMN }) => {
       />
       <div
         ref={propertiesPanelRef}
-        className="bg-background text-foreground border border-input rounded-md max-w-[400px]"
+        className="bg-background text-foreground border border-input rounded-md w-64"
       />
     </div>
   );
