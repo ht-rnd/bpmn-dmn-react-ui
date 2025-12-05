@@ -3,12 +3,10 @@ import {
   BpmnEditor,
   BpmnProvider,
   BpmnToolbar,
-  BpmnViewer,
   DmnEditor,
   DmnProvider,
   DmnToolbar,
-  DmnViewer,
-} from "./lib";
+} from "@ht-rnd/bpmn-dmn-react-ui";
 
 export const App: React.FC = () => {
   const editorRef = useRef(null);
@@ -16,6 +14,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="m-4 flex flex-col gap-4">
+      <h1 className="text-2xl font-bold mb-4">BPMN Editor Demo</h1>
       <BpmnProvider toolbarPosition="bottom">
         <BpmnToolbar
           config={{
@@ -31,20 +30,20 @@ export const App: React.FC = () => {
         <div className="h-[600px]">
           <BpmnEditor
             ref={editorRef}
-            onXMLChange={(xml) => {
-              //console.log("BPMN updated:", xml);
+            onXMLChange={(_xml: string) => {
+              //console.log("BPMN updated:", _xml);
             }}
-            onUpload={(xml) => {
-              //console.log("BPMN uploaded:", xml);
+            onUpload={(_xml: string) => {
+              //console.log("BPMN uploaded:", _xml);
             }}
-            onSave={(xml) => {
-              //console.log("BPMN saved:", xml);
+            onSave={(_xml: string) => {
+              //console.log("BPMN saved:", _xml);
             }}
           />
         </div>
       </BpmnProvider>
-      <BpmnViewer />
 
+      <h1 className="text-2xl font-bold mb-4 mt-8">DMN Editor Demo</h1>
       <DmnProvider>
         <DmnToolbar
           config={{
@@ -59,19 +58,18 @@ export const App: React.FC = () => {
         <div className="h-[600px]">
           <DmnEditor
             ref={editorRef2}
-            onXMLChange={(xml) => {
-              //console.log("DMN updated:", xml);
+            onXMLChange={(_xml: string) => {
+              //console.log("DMN updated:", _xml);
             }}
-            onUpload={(xml) => {
-              //console.log("DMN uploaded:", xml);
+            onUpload={(_xml: string) => {
+              //console.log("DMN uploaded:", _xml);
             }}
-            onSave={(xml) => {
-              //console.log("DMN saved:", xml);
+            onSave={(_xml: string) => {
+              //console.log("DMN saved:", _xml);
             }}
           />
         </div>
       </DmnProvider>
-      <DmnViewer />
     </div>
   );
 };

@@ -30,17 +30,13 @@
     "url": "https://github.com/ht-rnd/bpmn-dmn-react-ui"
   },
   "scripts": {
-    "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "test": "vitest --outputFile=./support/junit.xml run --coverage",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "test": "vitest --outputFile=./support/junit.xml run --coverage"
   },
   "dependencies": {
     "@bpmn-io/properties-panel": "^3.25.1",
-    "@radix-ui/react-slot": "^1.2.2",
+    "@radix-ui/react-slot": "^1.1.0",
     "@vitejs/plugin-react": "^4.7.0",
     "bpmn-js": "^18.1.1",
     "bpmn-js-bpmnlint": "^0.23.0",
@@ -49,55 +45,35 @@
     "bpmnlint": "^11.4.2",
     "camunda-bpmn-js": "^5.5.1",
     "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
     "diagram-js-minimap": "^5.2.0",
     "dmn-js": "^17.2.0",
     "dmn-js-properties-panel": "^3.8.3",
-    "esbuild": "^0.25.2",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.5.5",
     "zeebe-bpmn-moddle": "^1.9.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
-    "@storybook/addon-themes": "^9.0.16",
-    "@storybook/react-vite": "^9.0.16",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^22.10.2",
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.6",
-    "@vitejs/plugin-react-swc": "^3.5.0",
     "@vitest/coverage-istanbul": "^3.2.4",
     "@vitest/coverage-v8": "^3.2.4",
-    "autoprefixer": "^10.4.20",
     "diagram-js": "^15.3.0",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
-    "eslint-plugin-storybook": "^9.0.16",
     "globals": "^15.13.0",
     "jsdom": "^26.1.0",
-    "postcss": "^8.4.49",
-    "react-router-dom": "^7.1.5",
-    "storybook": "^9.0.16",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.18.1",
     "vite": "^6.2.6",
     "vite-plugin-bundle-css": "^0.1.1",
     "vite-plugin-dts": "^4.5.3",
     "vitest": "^3.2.4"
-  },
-  "peerDependencies": {
-    "@tailwindcss/vite": "^4.1.7",
-    "tailwind-merge": "^2.5.5",
-    "tailwindcss": "^3.4.17",
-    "tailwindcss-animate": "^1.0.7"
-  },
-  "eslintConfig": {
-    "extends": [
-      "plugin:storybook/recommended"
-    ]
   }
 }
