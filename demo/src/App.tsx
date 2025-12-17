@@ -1,75 +1,84 @@
-import { useRef } from "react";
-import {
-  BpmnEditor,
-  BpmnProvider,
-  BpmnToolbar,
-  DmnEditor,
-  DmnProvider,
-  DmnToolbar,
-} from "@ht-rnd/bpmn-dmn-react-ui";
+import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import type { ComponentConfig } from "./interfaces";
+import { Header } from "./components/Header";
+import { HomePage } from "./pages/HomePage";
+import { BpmnPage } from "./pages/BpmnPage";
+import { DmnPage } from "./pages/DmnPage";
+
+const defaultConfig: ComponentConfig = {
+  mode: "editor",
+  toolbarPosition: "top",
+  toolbarSide: "right",
+  toolbarOrientation: "horizontal",
+  toolbarSpacing: "md",
+  newButton: {
+    hidden: false,
+    label: "New",
+    variant: "default",
+    className: "",
+  },
+  loadButton: {
+    hidden: false,
+    label: "Load",
+    variant: "default",
+    className: "",
+  },
+  saveButton: {
+    hidden: false,
+    label: "Save",
+    variant: "default",
+    className: "",
+  },
+  downloadButton: {
+    hidden: false,
+    label: "Download",
+    variant: "default",
+    className: "",
+  },
+  toggleButton: {
+    hidden: false,
+    label: "Toggle View",
+    variant: "default",
+    className: "",
+  },
+};
 
 export const App: React.FC = () => {
-  const editorRef = useRef(null);
-  const editorRef2 = useRef(null);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [bpmnConfig, setBpmnConfig] = useState<ComponentConfig>(defaultConfig);
+  const [dmnConfig, setDmnConfig] = useState<ComponentConfig>(defaultConfig);
+
+  const handleThemeChange = (newTheme: "light" | "dark") => {
+    setTheme(newTheme);
+  };
 
   return (
-    <div className="m-4 flex flex-col gap-4">
-      <h1 className="text-2xl font-bold mb-4">BPMN Editor Demo</h1>
-      <BpmnProvider toolbarPosition="bottom">
-        <BpmnToolbar
-          config={{
-            load: {
-              variant: "default",
-            },
-            download: { hidden: true },
-            new: { hidden: true },
-            toggle: { hidden: true },
-            side: "right",
-          }}
+    <div className={`${theme} bg-background text-foreground`}>
+      <Header theme={theme} onThemeChange={handleThemeChange} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/bpmn"
+          element={
+            <BpmnPage
+              theme={theme}
+              config={bpmnConfig}
+              onConfigChange={setBpmnConfig}
+            />
+          }
         />
-        <div className="h-[600px]">
-          <BpmnEditor
-            ref={editorRef}
-            onXMLChange={(_xml: string) => {
-              //console.log("BPMN updated:", _xml);
-            }}
-            onUpload={(_xml: string) => {
-              //console.log("BPMN uploaded:", _xml);
-            }}
-            onSave={(_xml: string) => {
-              //console.log("BPMN saved:", _xml);
-            }}
-          />
-        </div>
-      </BpmnProvider>
-
-      <h1 className="text-2xl font-bold mb-4 mt-8">DMN Editor Demo</h1>
-      <DmnProvider>
-        <DmnToolbar
-          config={{
-            load: {
-              variant: "default",
-            },
-            download: { hidden: true },
-            new: { hidden: true },
-            toggle: { hidden: true },
-          }}
+        <Route
+          path="/dmn"
+          element={
+            <DmnPage
+              theme={theme}
+              config={dmnConfig}
+              onConfigChange={setDmnConfig}
+            />
+          }
         />
-        <div className="h-[600px]">
-          <DmnEditor
-            ref={editorRef2}
-            onXMLChange={(_xml: string) => {
-              //console.log("DMN updated:", _xml);
-            }}
-            onUpload={(_xml: string) => {
-              //console.log("DMN uploaded:", _xml);
-            }}
-            onSave={(_xml: string) => {
-              //console.log("DMN saved:", _xml);
-            }}
-          />
-        </div>
-      </DmnProvider>
+      </Routes>
     </div>
   );
 };
