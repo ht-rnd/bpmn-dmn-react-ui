@@ -6,7 +6,7 @@ import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/bpmn-dmn-react-ui">
       <App />
     </BrowserRouter>
   </StrictMode>

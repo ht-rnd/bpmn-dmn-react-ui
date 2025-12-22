@@ -8,10 +8,14 @@ export default defineConfig({
     alias: {
       "@ht-rnd/bpmn-dmn-react-ui": path.resolve(
         __dirname,
-        "../dist/lib/main.es.js"
+        "../src/lib/index.ts"
       ),
       react: path.resolve(__dirname, "./node_modules/react"),
       "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
     },
+  },
+  base: "/bpmn-dmn-react-ui",
+  server: {
+    open: "/bpmn-dmn-react-ui",
   },
 });
