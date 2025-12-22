@@ -48,6 +48,7 @@
     "diagram-js-minimap": "^5.2.0",
     "dmn-js": "^17.2.0",
     "dmn-js-properties-panel": "^3.8.3",
+    "esbuild": "^0.25.2",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
