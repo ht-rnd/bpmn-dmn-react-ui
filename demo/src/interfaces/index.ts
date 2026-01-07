@@ -32,3 +32,12 @@ export interface SampleDiagram {
   description: string;
   xml: string;
 }
+
+export interface AppContextType {
+  theme: "light" | "dark";
+  setTheme: (theme: "light" | "dark") => void;
+  bpmnConfig: ComponentConfig;
+  setBpmnConfig: (config: ComponentConfig) => void;
+  dmnConfig: ComponentConfig;
+  setDmnConfig: (config: ComponentConfig) => void;
+}

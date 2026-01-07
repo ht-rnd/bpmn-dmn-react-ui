@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import {
   BpmnEditor,
   BpmnProvider,
@@ -6,12 +6,13 @@ import {
   BpmnViewer,
   // @ts-ignore: no type declarations for '@ht-rnd/bpmn-dmn-react-ui'
 } from "@ht-rnd/bpmn-dmn-react-ui";
-import type { IBpmnPageProps } from "../interfaces/props";
+import { useAppContext } from "../contexts/AppContext";
 import { SampleDiagrams } from "../components/SampleDiagrams";
 import { PropsPanel } from "../components/PropsPanel";
 import { sampleBpmnXmls } from "../data/sampleXmls";
 
-export function BpmnPage({ theme, config, onConfigChange }: IBpmnPageProps) {
+export function BpmnPage() {
+  const { theme, bpmnConfig, setBpmnConfig } = useAppContext();
   const bpmnEditorRef = useRef<any>(null);
   const [xml, setXml] = useState<string | undefined>(undefined);
 
@@ -26,54 +27,46 @@ export function BpmnPage({ theme, config, onConfigChange }: IBpmnPageProps) {
     }
   };
 
-  useEffect(() => {
-    if (xml && bpmnEditorRef.current?.setXML) {
-      bpmnEditorRef.current.setXML(xml).catch((error: any) => {
-        console.error("Error loading BPMN:", error);
-      });
-    }
-  }, [xml]);
-
   return (
     <div className="min-h-screen bg-background text-foreground p-4 px-16">
-      <BpmnProvider theme={theme} toolbarPosition={config.toolbarPosition}>
-        {config.mode === "editor" && (
+      <BpmnProvider theme={theme} toolbarPosition={bpmnConfig.toolbarPosition}>
+        {bpmnConfig.mode === "editor" && (
           <>
             <BpmnToolbar
               config={{
                 new: {
-                  hidden: config.newButton.hidden,
-                  label: config.newButton.label,
-                  variant: config.newButton.variant,
-                  className: config.newButton.className,
+                  hidden: bpmnConfig.newButton.hidden,
+                  label: bpmnConfig.newButton.label,
+                  variant: bpmnConfig.newButton.variant,
+                  className: bpmnConfig.newButton.className,
                 },
                 load: {
-                  hidden: config.loadButton.hidden,
-                  label: config.loadButton.label,
-                  variant: config.loadButton.variant,
-                  className: config.loadButton.className,
+                  hidden: bpmnConfig.loadButton.hidden,
+                  label: bpmnConfig.loadButton.label,
+                  variant: bpmnConfig.loadButton.variant,
+                  className: bpmnConfig.loadButton.className,
                 },
                 save: {
-                  hidden: config.saveButton.hidden,
-                  label: config.saveButton.label,
-                  variant: config.saveButton.variant,
-                  className: config.saveButton.className,
+                  hidden: bpmnConfig.saveButton.hidden,
+                  label: bpmnConfig.saveButton.label,
+                  variant: bpmnConfig.saveButton.variant,
+                  className: bpmnConfig.saveButton.className,
                 },
                 download: {
-                  hidden: config.downloadButton.hidden,
-                  label: config.downloadButton.label,
-                  variant: config.downloadButton.variant,
-                  className: config.downloadButton.className,
+                  hidden: bpmnConfig.downloadButton.hidden,
+                  label: bpmnConfig.downloadButton.label,
+                  variant: bpmnConfig.downloadButton.variant,
+                  className: bpmnConfig.downloadButton.className,
                 },
                 toggle: {
-                  hidden: config.toggleButton.hidden,
-                  label: config.toggleButton.label,
-                  variant: config.toggleButton.variant,
-                  className: config.toggleButton.className,
+                  hidden: bpmnConfig.toggleButton.hidden,
+                  label: bpmnConfig.toggleButton.label,
+                  variant: bpmnConfig.toggleButton.variant,
+                  className: bpmnConfig.toggleButton.className,
                 },
-                side: config.toolbarSide,
-                orientation: config.toolbarOrientation,
-                spacing: config.toolbarSpacing,
+                side: bpmnConfig.toolbarSide,
+                orientation: bpmnConfig.toolbarOrientation,
+                spacing: bpmnConfig.toolbarSpacing,
               }}
             />
 
@@ -91,7 +84,7 @@ export function BpmnPage({ theme, config, onConfigChange }: IBpmnPageProps) {
           </>
         )}
 
-        {config.mode === "viewer" && (
+        {bpmnConfig.mode === "viewer" && (
           <div className="h-[600px] rounded-lg overflow-hidden">
             <BpmnViewer xml={xml} />
           </div>
@@ -99,7 +92,7 @@ export function BpmnPage({ theme, config, onConfigChange }: IBpmnPageProps) {
       </BpmnProvider>
 
       <div className="flex flex-col gap-8 mt-8">
-        <PropsPanel config={config} onConfigChange={onConfigChange} />
+        <PropsPanel config={bpmnConfig} onConfigChange={setBpmnConfig} />
         <SampleDiagrams
           samples={sampleBpmnXmls}
           onSelect={handleXmlSelect}

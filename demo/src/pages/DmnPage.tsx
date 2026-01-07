@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import {
   DmnEditor,
   DmnProvider,
@@ -6,12 +6,13 @@ import {
   DmnViewer,
   // @ts-ignore: no type declarations for '@ht-rnd/bpmn-dmn-react-ui'
 } from "@ht-rnd/bpmn-dmn-react-ui";
-import type { IDmnPageProps } from "../interfaces/props";
+import { useAppContext } from "../contexts/AppContext";
 import { SampleDiagrams } from "../components/SampleDiagrams";
 import { PropsPanel } from "../components/PropsPanel";
 import { sampleDmnXmls } from "../data/sampleXmls";
 
-export function DmnPage({ theme, config, onConfigChange }: IDmnPageProps) {
+export function DmnPage() {
+  const { theme, dmnConfig, setDmnConfig } = useAppContext();
   const dmnEditorRef = useRef<any>(null);
   const [xml, setXml] = useState<string | undefined>(undefined);
 
@@ -26,54 +27,46 @@ export function DmnPage({ theme, config, onConfigChange }: IDmnPageProps) {
     }
   };
 
-  useEffect(() => {
-    if (xml && dmnEditorRef.current?.setXML) {
-      dmnEditorRef.current.setXML(xml).catch((error: any) => {
-        console.error("Error loading DMN:", error);
-      });
-    }
-  }, [xml]);
-
   return (
     <div className="min-h-screen bg-background text-foreground p-4 px-16">
-      <DmnProvider theme={theme} toolbarPosition={config.toolbarPosition}>
-        {config.mode === "editor" && (
+      <DmnProvider theme={theme} toolbarPosition={dmnConfig.toolbarPosition}>
+        {dmnConfig.mode === "editor" && (
           <>
             <DmnToolbar
               config={{
                 new: {
-                  hidden: config.newButton.hidden,
-                  label: config.newButton.label,
-                  variant: config.newButton.variant,
-                  className: config.newButton.className,
+                  hidden: dmnConfig.newButton.hidden,
+                  label: dmnConfig.newButton.label,
+                  variant: dmnConfig.newButton.variant,
+                  className: dmnConfig.newButton.className,
                 },
                 load: {
-                  hidden: config.loadButton.hidden,
-                  label: config.loadButton.label,
-                  variant: config.loadButton.variant,
-                  className: config.loadButton.className,
+                  hidden: dmnConfig.loadButton.hidden,
+                  label: dmnConfig.loadButton.label,
+                  variant: dmnConfig.loadButton.variant,
+                  className: dmnConfig.loadButton.className,
                 },
                 save: {
-                  hidden: config.saveButton.hidden,
-                  label: config.saveButton.label,
-                  variant: config.saveButton.variant,
-                  className: config.saveButton.className,
+                  hidden: dmnConfig.saveButton.hidden,
+                  label: dmnConfig.saveButton.label,
+                  variant: dmnConfig.saveButton.variant,
+                  className: dmnConfig.saveButton.className,
                 },
                 download: {
-                  hidden: config.downloadButton.hidden,
-                  label: config.downloadButton.label,
-                  variant: config.downloadButton.variant,
-                  className: config.downloadButton.className,
+                  hidden: dmnConfig.downloadButton.hidden,
+                  label: dmnConfig.downloadButton.label,
+                  variant: dmnConfig.downloadButton.variant,
+                  className: dmnConfig.downloadButton.className,
                 },
                 toggle: {
-                  hidden: config.toggleButton.hidden,
-                  label: config.toggleButton.label,
-                  variant: config.toggleButton.variant,
-                  className: config.toggleButton.className,
+                  hidden: dmnConfig.toggleButton.hidden,
+                  label: dmnConfig.toggleButton.label,
+                  variant: dmnConfig.toggleButton.variant,
+                  className: dmnConfig.toggleButton.className,
                 },
-                side: config.toolbarSide,
-                orientation: config.toolbarOrientation,
-                spacing: config.toolbarSpacing,
+                side: dmnConfig.toolbarSide,
+                orientation: dmnConfig.toolbarOrientation,
+                spacing: dmnConfig.toolbarSpacing,
               }}
             />
 
@@ -91,7 +84,7 @@ export function DmnPage({ theme, config, onConfigChange }: IDmnPageProps) {
           </>
         )}
 
-        {config.mode === "viewer" && (
+        {dmnConfig.mode === "viewer" && (
           <div className="h-[600px] rounded-lg overflow-hidden">
             <DmnViewer xml={xml} />
           </div>
@@ -99,7 +92,7 @@ export function DmnPage({ theme, config, onConfigChange }: IDmnPageProps) {
       </DmnProvider>
 
       <div className="mt-8 flex flex-col gap-8">
-        <PropsPanel config={config} onConfigChange={onConfigChange} />
+        <PropsPanel config={dmnConfig} onConfigChange={setDmnConfig} />
         <SampleDiagrams
           samples={sampleDmnXmls}
           onSelect={handleXmlSelect}

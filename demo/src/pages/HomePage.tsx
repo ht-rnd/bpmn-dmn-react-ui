@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { Zap, SwatchBook, Moon } from "lucide-react";
 import {
   Card,
