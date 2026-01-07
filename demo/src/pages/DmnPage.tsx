@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import {
   DmnEditor,
   DmnProvider,
@@ -25,14 +25,6 @@ export function DmnPage({ theme, config, onConfigChange }: IDmnPageProps) {
       }
     }
   };
-
-  useEffect(() => {
-    if (xml && dmnEditorRef.current?.setXML) {
-      dmnEditorRef.current.setXML(xml).catch((error: any) => {
-        console.error("Error loading DMN:", error);
-      });
-    }
-  }, [xml]);
 
   return (
     <div className="min-h-screen bg-background text-foreground p-4 px-16">

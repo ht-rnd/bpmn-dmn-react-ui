@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import {
   BpmnEditor,
   BpmnProvider,
@@ -25,14 +25,6 @@ export function BpmnPage({ theme, config, onConfigChange }: IBpmnPageProps) {
       }
     }
   };
-
-  useEffect(() => {
-    if (xml && bpmnEditorRef.current?.setXML) {
-      bpmnEditorRef.current.setXML(xml).catch((error: any) => {
-        console.error("Error loading BPMN:", error);
-      });
-    }
-  }, [xml]);
 
   return (
     <div className="min-h-screen bg-background text-foreground p-4 px-16">
