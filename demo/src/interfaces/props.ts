@@ -21,15 +21,3 @@ export interface ISampleDiagramsProps {
   onSelect: (xml: string) => void;
   title?: string;
 }
-
-export interface IBpmnPageProps {
-  theme: "light" | "dark";
-  config: ComponentConfig;
-  onConfigChange: (config: ComponentConfig) => void;
-}
-
-export interface IDmnPageProps {
-  theme: "light" | "dark";
-  config: ComponentConfig;
-  onConfigChange: (config: ComponentConfig) => void;
-}
