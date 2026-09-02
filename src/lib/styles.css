@@ -7,11 +7,43 @@
 @import "dmn-js/dist/assets/dmn-js-shared.css";
 
 @import "bpmn-js/dist/assets/diagram-js.css";
+@import "bpmn-js/dist/assets/bpmn-js.css";
 @import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
 @import "bpmn-js-color-picker/colors/color-picker.css";
 @import "bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css";
 @import "@bpmn-io/properties-panel/dist/assets/properties-panel.css";
 @import "diagram-js-minimap/assets/diagram-js-minimap.css";
+
+/* Honor the consuming app's --radius (e.g. shadcn/ui) for bpmn-js HTML overlay elements.
+   !important beats duplicate library CSS from multiple styles.css imports. */
+.bio-properties-panel-input {
+  border-radius: var(--radius, 2px) !important;
+}
+
+.bio-properties-panel-description code,
+.bio-properties-panel-tooltip-content,
+.bio-properties-panel-tooltip-content pre,
+.bio-properties-panel-feelers-editor .cm-editor.cm-focused,
+.bio-properties-panel-feelers-input .cm-editor.cm-focused,
+.bio-properties-panel-feelers-editor-container .bio-properties-panel-feelers-editor__open-popup-placeholder,
+.bio-properties-panel-feel-editor-container .bio-properties-panel-feel-editor__open-popup-placeholder {
+  border-radius: var(--radius, 3px) !important;
+}
+
+.djs-popup,
+.djs-popup-search input,
+.djs-search-input input,
+.djs-tooltip-error {
+  border-radius: var(--radius, 4px);
+}
+
+.djs-palette {
+  border-radius: var(--radius, 3px);
+}
+
+.bjs-drilldown {
+  border-radius: var(--radius, 2px);
+}
 
 .djs-container > svg:focus {
   border: none;
@@ -23,40 +55,183 @@
   outline: none;
 }
 
+/* Dark mode — no filter inversion (causes hue shifts on colored elements).
+   Instead: dark canvas bg inherits from the parent container's bg-background,
+   and each overlay (palette, popup, context pad, minimap) gets explicit dark styles. */
+
+/* BPMN canvas */
 .dark .djs-container {
-  filter: invert(1) hue-rotate(180deg);
+  background-color: hsl(var(--background));
 }
+
+/* Canvas text labels (event names, gateway names, flow labels) — text-only visuals
+   have no rect background, meaning they sit on the dark canvas. :has(rect) excludes task/pool
+   shapes where text sits on a white fill and should stay dark. */
+.dark .djs-element .djs-visual:not(:has(rect)) text {
+  fill: hsl(var(--foreground)) !important;
+}
+
+/* Text annotations — bpmn-js renders an invisible rect hit-area so :not(:has(rect)) misses them.
+   A class is added via JS (BpmnEditor/BpmnViewer) on shape.added / import.done. */
+.dark .bpmn-text-annotation .djs-visual text {
+  fill: hsl(var(--foreground)) !important;
+}
+.dark .bpmn-text-annotation .djs-visual path {
+  stroke: hsl(var(--foreground)) !important;
+}
+
+/* Connection lines and arrowheads — bpmn-js sets stroke via inline style, need !important.
+   Use muted-foreground (medium grey) so lines are visible on both dark canvas and white pool backgrounds. */
+.dark .djs-connection .djs-visual path,
+.dark .djs-connection .djs-visual polyline,
+.dark .djs-connection .djs-visual circle {
+  stroke: hsl(var(--muted-foreground)) !important;
+}
+.dark .djs-container svg marker path {
+  fill: hsl(var(--muted-foreground)) !important;
+  stroke: hsl(var(--muted-foreground)) !important;
+}
+
+/* Palette */
+.dark .djs-palette {
+  background-color: hsl(var(--background)) !important;
+  border-color: hsl(var(--border)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+.dark .djs-palette .entry {
+  color: hsl(var(--foreground)) !important;
+}
+.dark .djs-palette .entry:hover,
+.dark .djs-palette .highlighted-entry {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Context pad */
+.dark .djs-context-pad .entry,
+.dark .djs-context-pad .group {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+/* Popup menu (append, replace, etc.) */
+.dark .djs-popup {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+.dark .djs-popup-body,
+.dark .djs-popup-header {
+  background: transparent !important;
+  color: hsl(var(--foreground)) !important;
+}
+.dark .djs-popup .entry,
+.dark .djs-popup-entry-name,
+.dark .djs-popup-label {
+  color: hsl(var(--foreground)) !important;
+}
+.dark .djs-popup .entry:hover,
+.dark .djs-popup .entry.selected {
+  background-color: hsl(var(--accent)) !important;
+}
+.dark .djs-popup-search input {
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+/* Diagram search */
+.dark .djs-search-container {
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+.dark .djs-search-input input {
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+.dark .djs-search-result:hover,
+.dark .djs-search-result-selected {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Minimap */
+.dark .djs-minimap {
+  background-color: hsl(var(--background)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+.dark .djs-minimap .toggle {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* In-canvas text editing */
 .dark .djs-direct-editing-content {
-  color: black;
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Properties panel */
+.dark .bio-properties-panel {
+  --text-base-color: hsl(var(--foreground));
+  --description-color: hsl(var(--muted-foreground));
+  --description-code-background-color: hsl(var(--accent));
+  --description-code-border-color: hsl(var(--border));
+  --description-list-item-color: hsl(var(--muted-foreground));
+  --placeholder-color: hsl(var(--muted-foreground));
+  --placeholder-background-color: hsl(var(--background));
+  --header-background-color: hsl(var(--card));
+  --header-icon-fill-color: hsl(var(--foreground));
+  --header-bottom-border-color: hsl(var(--border));
+  --group-background-color: hsl(var(--background));
+  --group-bottom-border-color: hsl(var(--border));
+  --sticky-group-background-color: hsl(var(--card));
+  --sticky-group-bottom-border-color: hsl(var(--border));
+  --input-background-color: hsl(var(--accent));
+  --input-border-color: hsl(var(--border));
+  --input-disabled-color: hsl(var(--muted-foreground));
+  --input-disabled-background-color: hsl(var(--accent));
+  --input-disabled-border-color: hsl(var(--border));
+  --arrow-fill-color: hsl(var(--muted-foreground));
+  --arrow-hover-background-color: hsl(var(--accent));
+  --dot-color: hsl(var(--muted-foreground));
+  --side-line-background-color: hsl(var(--border));
+  --side-line-extension-background-color: hsl(var(--border));
+  --list-entry-dot-background-color: hsl(var(--muted-foreground));
+  --list-entry-header-button-fill-color: hsl(var(--muted-foreground));
+  --dropdown-item-background-color: hsl(var(--background));
+  --dropdown-item-hover-background-color: hsl(var(--accent));
+  --dropdown-separator-background-color: hsl(var(--border));
 }
 
 /* DMN */
 .dark .tjs-container {
-  filter: invert(1) hue-rotate(180deg);
-}
-.dark .dms-select-options {
-  filter: invert(1) hue-rotate(180deg);
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
 .dark .viewer-container {
-  filter: invert(1) hue-rotate(180deg);
+  background-color: hsl(var(--background));
+}
+.dark .dmn-decision-table-container th,
+.dark .dmn-decision-table-container td {
+  background-color: hsl(var(--background)) !important;
+  border-color: hsl(var(--border)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+.dark .dmn-decision-table-container thead th,
+.dark .dmn-decision-table-container thead td {
+  background-color: hsl(var(--card)) !important;
+}
+.dark .dms-select-options {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+.dark .dmn-definitions,
+.dark .dmn-definitions-name,
+.dark .dmn-definitions-id {
+  color: hsl(var(--foreground)) !important;
 }
 .dark .literal-expression-properties {
-  color: black;
-}
-.dark .dmn-definitions {
-  color: black;
-}
-
-/* BPMN */
-.dark .bio-properties-panel-container {
-  filter: invert(1) hue-rotate(180deg);
-}
-.dark .djs-minimap {
-  color: black;
-}
-.dark .djs-popup {
-  color: black;
-}
-.dark .entry {
-  color: black;
+  color: hsl(var(--foreground));
 }

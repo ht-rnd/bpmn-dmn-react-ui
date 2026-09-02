@@ -44,6 +44,10 @@ export const BpmnViewer = ({ xml = emptyBPMN }) => {
     });
     modelerRef.current = bpmnModeler;
 
+    (bpmnModeler.get("propertiesPanel") as any)._layoutConfig = {
+      groups: { general: { open: true } },
+    };
+
     const disableEditing = () => {
       if (!propertiesPanelRef.current) return;
 
@@ -96,6 +100,17 @@ export const BpmnViewer = ({ xml = emptyBPMN }) => {
         });
     }
 
+    const tagAnnotations = (instance: any) => {
+      const registry = instance.get("elementRegistry") as any;
+      registry.forEach((element: any) => {
+        if (element.type === "bpmn:TextAnnotation") {
+          registry.getGraphics(element)?.classList.add("bpmn-text-annotation");
+        }
+      });
+    };
+    bpmnViewer.on("import.done", () => tagAnnotations(bpmnViewer));
+    bpmnModeler.on("import.done", () => tagAnnotations(bpmnModeler));
+
     const eventBus = bpmnViewer.get("eventBus") as EventBus;
     eventBus.on("element.click", (event: { element: { id: string } }) => {
       const element = event.element;
@@ -134,7 +149,7 @@ export const BpmnViewer = ({ xml = emptyBPMN }) => {
       />
       <div
         ref={propertiesPanelRef}
-        className="bg-background text-foreground border border-input rounded-md w-64"
+        className="bg-background text-foreground border border-input rounded-md w-64 overflow-hidden"
       />
     </div>
   );
