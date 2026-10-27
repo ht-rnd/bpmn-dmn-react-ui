@@ -190,6 +190,13 @@
   --sticky-group-bottom-border-color: hsl(var(--border));
   --input-background-color: hsl(var(--accent));
   --input-border-color: hsl(var(--border));
+  /* Default library focus bg is near-white; keep dark so light text stays readable. */
+  --input-focus-background-color: hsl(var(--secondary));
+  --input-focus-border-color: hsl(var(--ring));
+  --focus-outline-color: hsl(var(--ring));
+  --input-error-background-color: hsl(var(--destructive) / 0.25);
+  --input-error-border-color: hsl(var(--destructive));
+  --input-error-focus-border-color: hsl(var(--destructive));
   --input-disabled-color: hsl(var(--muted-foreground));
   --input-disabled-background-color: hsl(var(--accent));
   --input-disabled-border-color: hsl(var(--border));
@@ -203,6 +210,14 @@
   --dropdown-item-background-color: hsl(var(--background));
   --dropdown-item-hover-background-color: hsl(var(--accent));
   --dropdown-separator-background-color: hsl(var(--border));
+  --feel-hover-background-color: hsl(var(--accent));
+  --feel-hover-color: hsl(var(--foreground));
+  --feel-inactive-color: hsl(var(--muted-foreground));
+  --feel-open-popup-color: hsl(var(--muted-foreground));
+  --feel-open-popup-background-color: hsl(var(--background));
+  --feel-indicator-background-color: hsl(var(--muted));
+  --toggle-switch-off-background-color: hsl(var(--muted));
+  --toggle-switch-switcher-background-color: hsl(var(--foreground));
 }
 
 /* DMN */
