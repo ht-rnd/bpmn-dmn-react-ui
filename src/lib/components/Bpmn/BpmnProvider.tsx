@@ -26,6 +26,7 @@ export const BpmnProvider = ({
 }: IProviderProps) => {
   const editorRef = useRef<IEditorRef>(null);
   const [isEditorView, setIsEditorView] = useState(true);
+  const [isSavingDiagram, setIsSavingDiagram] = useState(false);
 
   const handleNewDiagram = useCallback(async () => {
     if (!editorRef.current) return;
@@ -39,7 +40,12 @@ export const BpmnProvider = ({
 
   const handleSaveDiagram = useCallback(async () => {
     if (!editorRef.current) return;
-    await editorRef.current.getXML(true);
+    setIsSavingDiagram(true);
+    try {
+      await editorRef.current.getXML(true);
+    } finally {
+      setIsSavingDiagram(false);
+    }
   }, []);
 
   const handleDownloadDiagram = useCallback(async () => {
@@ -71,6 +77,7 @@ export const BpmnProvider = ({
     handleDownloadDiagram,
     handleToggleView,
     isEditorView,
+    isSavingDiagram,
     setIsEditorView,
   };
 

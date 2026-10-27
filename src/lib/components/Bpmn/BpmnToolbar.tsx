@@ -3,7 +3,7 @@ import { orientation, side, spacing } from "../../consts/Toolbar";
 import type { IToolbar, IToolbarButton } from "../../types";
 import { Button } from "../ui/button";
 import { useBpmnContext } from "./BpmnProvider";
-import { Upload } from "lucide-react";
+import { Loader2, Upload } from "lucide-react";
 
 export const BpmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
   const {
@@ -12,6 +12,7 @@ export const BpmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
     handleSaveDiagram,
     handleDownloadDiagram,
     handleToggleView,
+    isSavingDiagram,
   } = useBpmnContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -85,15 +86,25 @@ export const BpmnToolbar = ({ config = {} }: { config?: IToolbar }) => {
           const buttonConfig =
             (config[button.id as keyof IToolbar] as IToolbarButton) || {};
 
+          const isSaveButton = button.id === "save";
+
           return (
             <Button
               key={button.id}
               variant={buttonConfig.variant || "secondary"}
               onClick={() => handleButtonClick(button.id)}
               className={buttonConfig.className}
+              disabled={isSaveButton && isSavingDiagram}
             >
               {button.id === "load" && <Upload />}
-              {buttonConfig.label || button.defaultLabel}
+              {isSaveButton && isSavingDiagram ? (
+                <>
+                  <Loader2 size={14} className="animate-spin" />
+                  Saving…
+                </>
+              ) : (
+                buttonConfig.label || button.defaultLabel
+              )}
             </Button>
           );
         })}

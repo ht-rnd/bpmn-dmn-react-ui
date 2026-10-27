@@ -49,6 +49,7 @@ export interface IContextValue {
   handleSaveDiagram: () => Promise<void>;
   handleToggleView: () => void;
   isEditorView: boolean;
+  isSavingDiagram: boolean;
   setIsEditorView: (view: boolean) => void;
   position?: "top" | "bottom";
 }

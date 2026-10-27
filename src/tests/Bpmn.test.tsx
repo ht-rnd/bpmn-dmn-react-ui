@@ -18,6 +18,7 @@ describe("BPMN Components", () => {
       handleDownloadDiagram: mockHandleDownloadDiagram,
       handleToggleView: mockHandleToggleView,
       isEditorView: true,
+      isSavingDiagram: false,
       setIsEditorView: vi.fn(),
     });
   });
@@ -108,6 +109,7 @@ describe("BPMN Components", () => {
       handleSaveDiagram: vi.fn(),
       handleToggleView: vi.fn(),
       isEditorView: true,
+      isSavingDiagram: false,
       setIsEditorView: vi.fn(),
     });
 
@@ -135,6 +137,7 @@ describe("BPMN Components", () => {
       handleSaveDiagram: vi.fn(),
       handleToggleView: vi.fn(),
       isEditorView: false,
+      isSavingDiagram: false,
       setIsEditorView: vi.fn(),
     });
 
